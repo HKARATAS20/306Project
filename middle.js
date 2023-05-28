@@ -1,38 +1,4 @@
-function helloWorld() {
-    console.log("Hello Woerld");
-    
-}
-function get_all_products() {
 
-  
-    fetch('http://localhost:3000/products')
-    .then(function(response){
-      return response.json();
-    })
-    .then(function(products){
-      var table = document.getElementById("Products");
-      for(var i = table.rows.length -1; i > 0;i--){
-        table.deleteRow(i);
-      }
-      console.log(products);
-      //console.log(products[0].Name);
-      for(var i = 0; i < products.length; i++){
-        var row = table.insertRow(i+1);
-        var cell1 = row.insertCell(0);
-        var cell2 = row.insertCell(1);
-        var cell3 = row.insertCell(2);
-
-        cell1.innerHTML = products[i].name;
-        cell2.innerHTML = products[i].price;
-        cell3.innerHTML = products[i].category;
-  
-      }
-      table.style.display = "block";
-
-
-    }); 
-    
-}
 
 function productsby() {
     var category = document.getElementById("Category-select").value;
