@@ -52,10 +52,20 @@ function productsby() {
         var cell1 = row.insertCell(0);
         var cell2 = row.insertCell(1);
         var cell3 = row.insertCell(2);
+        var cell4 = row.insertCell(3);
 
         cell1.innerHTML = products[i].name;
         cell2.innerHTML = products[i].price;
         cell3.innerHTML = products[i].category;
+
+        var descriptionDiv = document.createElement("div"); // Create a new <div> element for description
+        descriptionDiv.style.display = "none"; // Hide the description initially
+        row.appendChild(descriptionDiv); // Append the <div> element to the row
+
+        var button = document.createElement("button");
+        button.innerHTML = "Show Description";
+        cell4.appendChild(button);
+        button.addEventListener("click", createShowDescriptionHandler(descriptionDiv, products[i].description));
   
       }
       table.style.display = "block";
@@ -64,6 +74,17 @@ function productsby() {
     }); 
 }
 
+function createShowDescriptionHandler(descriptionDiv, description) {
+  return function() {
+    if (descriptionDiv.style.display === "none") {
+      descriptionDiv.style.display = "block";
+      descriptionDiv.innerHTML = description; // Set the description content
+    } else {
+      descriptionDiv.style.display = "none";
+      descriptionDiv.innerHTML = ""; // Clear the description content
+    }
+  };
+}
 function getLifeExpectancy() {
     var agg = document.getElementById("Operation-select").value;
     var country = document.getElementById("Country").value;
