@@ -58,9 +58,6 @@ function productsby() {
         cell2.innerHTML = products[i].price;
         cell3.innerHTML = products[i].category;
 
-        descriptionDiv.style.display = "none"; // Hide the description initially
-        row.appendChild(descriptionDiv); // Append the <div> element to the row
-
         var showButton = document.createElement("button");
         showButton.innerHTML = "Show Description";
         showButton.addEventListener("click", createShowDescriptionHandler(products[i]));
