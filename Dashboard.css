@@ -69,3 +69,10 @@ body {
     position: relative;
   }
   
+  .close-button {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    cursor: pointer;
+    z-index: 2;
+  }

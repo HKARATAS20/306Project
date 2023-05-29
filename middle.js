@@ -73,6 +73,7 @@ closeButton.addEventListener("click", function() {
   });
 
   // Append elements to the content container
+  content.appendChild(closeButton);
   content.appendChild(nameElement);
   content.appendChild(priceElement);
   content.appendChild(descriptionElement);
@@ -80,7 +81,7 @@ closeButton.addEventListener("click", function() {
 
   // Append the content container to the modal
   modal.appendChild(content);
-  modal.appendChild(closeButton);
+//  modal.appendChild(closeButton);
 
   // Append the modal to the document body
   document.body.appendChild(modal);
