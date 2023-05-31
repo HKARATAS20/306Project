@@ -16,6 +16,8 @@ app.use(bodyParser.json());
 
 app.use(express.static(__dirname));
 
+var user_id;
+
 // Create a MySQL connection pool
 const db = mysql.createConnection({
   host: 'localhost',
@@ -30,7 +32,7 @@ app.listen(3000, () => {
 
 
 app.get('/',function(req,res){
-  fs.readFile('./products.html','utf8',(err,html) => {
+  fs.readFile('./login.html','utf8',(err,html) => {
       if(err){
           response.status(500).send('Error');
       }
@@ -40,6 +42,10 @@ app.get('/',function(req,res){
 
 app.get('/middle.js', function(req,res){
   res.sendFile(path.join(__dirname + '/middle.js'));
+});
+
+app.get('/login.js', function(req,res){
+  res.sendFile(path.join(__dirname + '/login.js'));
 });
 
 
@@ -124,6 +130,34 @@ function bycategory(category){
 }
 
 
+app.post('/addUser', (req, res) => {
+  db.query('USE project');
+  const { first_name, last_name, email, address } = req.body;
+  db.query(`INSERT INTO customers (first_name,last_name, email, address) VALUES (?, ?, ?, ?)`, [first_name,last_name, email, address], (error, results) => {
+    if (error) throw error;
+    res.send('Data added successfully!');
+  });
+});
+
+
+app.get('/getUser', (req,res) => {
+  db.query('USE project');
+  const{email} = req.query;
+  console.log("user email",email);
+
+
+  db.query(`SELECT * FROM customers WHERE email = '${email}'`,(error,results) => {
+      if(error){
+          throw error;
+      }
+      else{
+
+          user_id = results[0].customer_id;
+          console.log(user_id);
+          res.status(201).send(results);
+      }
+  });
+});
 
 
 

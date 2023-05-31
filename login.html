@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="login.css">
+    <meta charset="UTF-8">
+    <title>Homepage</title>
+    <style>
+
+    </style>
+  </head>
+  <body>
+    <h1>Welcome to my homepage</h1>
+
+    <button onclick="showForm('create')">Create User</button>
+    <button onclick="showForm('query')">Query User Information</button>
+
+    <form id="create-form">
+      <h2>Create User</h2>
+      <label for="name">Name</label>
+      <input type="text" id="name" name="name"><br><br>
+      <label for="surname">Surname</label>
+      <input type="text" id="surname" name="surname"><br><br>
+      <label for="email">email</label>
+      <input type="text" id="email" name="email"><br><br>
+      <label for="address">address</label>
+      <input type="text" id="address" name="address"><br><br>
+      <input type="button" value="Submit" onclick="addData()">
+    </form>
+
+    <form id="login-form">
+      <h2>login</h2>
+      <label for="login-email">email</label>
+      <input type="text" id="login-email" name="login-email"><br><br>
+      <input type="button" value="Submit" onclick="queryData()">
+    </form>
+
+    <script>
+      // Show the corresponding form when a button is clicked
+      function showForm(action) {
+        if (action === 'create') {
+          document.getElementById('create-form').classList.add('show');
+          document.getElementById('login-form').classList.remove('show');
+        } else if (action === 'query') {
+          document.getElementById('login-form').classList.add('show');
+          document.getElementById('create-form').classList.remove('show');
+        }
+      }
+    </script>
+      <script src="login.js"></script>
+  </body>
+</html>
