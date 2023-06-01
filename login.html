@@ -12,7 +12,7 @@
     <h1>Welcome to my homepage</h1>
 
     <button onclick="showForm('create')">Create User</button>
-    <button onclick="showForm('query')">Query User Information</button>
+    <button onclick="showForm('query')">Login</button>
 
     <form id="create-form">
       <h2>Create User</h2>
@@ -20,7 +20,7 @@
       <input type="text" id="name" name="name"><br><br>
       <label for="surname">Surname</label>
       <input type="text" id="surname" name="surname"><br><br>
-      <label for="email">email</label>
+      <label for="email">Email</label>
       <input type="text" id="email" name="email"><br><br>
       <label for="address">address</label>
       <input type="text" id="address" name="address"><br><br>
@@ -29,7 +29,7 @@
 
     <form id="login-form">
       <h2>login</h2>
-      <label for="login-email">email</label>
+      <label for="login-email">Email</label>
       <input type="text" id="login-email" name="login-email"><br><br>
       <input type="button" value="Submit" onclick="queryData()">
     </form>
