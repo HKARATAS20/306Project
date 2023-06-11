@@ -80,7 +80,7 @@ app.get('/productsbyId', (req,res) => {
           throw error;
       }
       else{
-        //console.log(results);
+        console.log(results);
           res.status(201).send(results);
       }
   });
@@ -142,32 +142,30 @@ function contains(val, col_name, table_name){
 function bycategory(category){
     var query = "";
     if(category == "All"){
-      query = `SELECT p.name, p.category, p.description, MIN(sp.price) AS min_price
+      query = `SELECT p.product_id ,p.name, p.category, p.description, MIN(sp.price) AS min_price
       FROM products p
       JOIN supplier_product sp ON p.product_id = sp.product_id
-      GROUP BY p.name, p.category, p.description`
+      GROUP BY p.product_id, p.category, p.description  `
     }  
     else{
 
-      query = `SELECT p.name, p.category, p.description, MIN(sp.price) AS min_price
+      query = `SELECT p.product_id, p.name, p.category, p.description, MIN(sp.price) AS min_price
       FROM products p
       JOIN supplier_product sp ON p.product_id = sp.product_id
       WHERE category = '${category}'
-      GROUP BY p.name, p.category, p.description`
+      GROUP BY p.product_id, p.category, p.description`
 
 
     }
     return query;
 }
 function byId(id){
-  var query = "";
-
-  
-
-    query = `SELECT p.name, p.category, p.description, sp.price
+  var  query = `SELECT s.name as supplier_name ,sp.supplier_id,p.product_id ,p.name, p.category, p.description, sp.price
     FROM products p
     JOIN supplier_product sp ON p.product_id = sp.product_id
-    GROUP BY p.name, p.category, p.description, sp.price`
+    JOIN suppliers s ON s.supplier_id = sp.supplier_id
+    WHERE p.product_id = '${id}'
+    GROUP BY supplier_name ,sp.supplier_id, p.product_id, p.category, p.description, sp.price`
 
 
   
@@ -185,6 +183,63 @@ app.post('/addUser', (req, res) => {
   });
 });
 
+
+app.post('/addToBasket', (req, res) => {
+  db.query('USE project');
+  const data = { product_id, supplier_id, quantity, price } = req.body;
+  db.query(`INSERT INTO basket_items (customer_id, product_id, supplier_id, quantity, price) VALUES (?, ?, ?, ?, ?)`, 
+          [user_id, product_id, supplier_id, quantity, price], (error, results) => {
+    if (error) throw error;
+    res.send('Data added successfully!');
+  });
+});
+
+
+app.post('/checkout', (req, res) => {
+  db.query('USE project');
+  
+  const { total } = req.body;
+  var address;
+  var order_id;
+
+  db.query(`SELECT * FROM customers WHERE customer_id = '${user_id}'`,(error, results) => {
+    if(error){
+        throw error;
+    }
+    else {
+        address = results[0].address;
+        console.log(address);
+    }
+  });
+
+
+  db.query(`SELECT LAST_INSERT_ID();`,(error,results) => {
+    if(error){
+        throw error;
+    }
+    else{
+        order_id = results;
+    }
+  });
+  console.log(address);
+  /*db.query(`INSERT INTO orders (customer_id, order_date , shipping_address, total_amount) VALUES (?, CURRENT_DATE(), "?", ?)`, 
+            [user_id,address, total], (error, results) => {
+    if (error) throw error;
+    res.send('Data added successfully!');
+  });*/
+
+
+});
+
+app.get('/addItems', (req, res) => {
+
+  const  { product_id, supplier_id, quantity, price } = req.body;
+
+  db.query(`INSERT INTO order_items (order_id,last_name, email, address) VALUES (?, ?, ?, ?)`, [first_name, last_name, email, address], (error, results) => {
+    if (error) throw error;
+    res.send('Data added successfully!');
+  });
+})
 
 app.get('/getUser', (req,res) => {
   db.query('USE project');
@@ -204,6 +259,43 @@ app.get('/getUser', (req,res) => {
       }
   });
 });
+
+
+app.get('/fillBasket', (req,res) => {
+  db.query('USE project');
+
+
+  db.query(`SELECT b.*, p.name , s.name as supplier_name, (SELECT SUM(price) FROM basket_items WHERE customer_id = ${user_id}) as total
+          FROM basket_items b
+          JOIN products p ON b.product_id = p.product_id
+          JOIN suppliers s ON s.supplier_id = b.supplier_id
+          WHERE b.customer_id = '${user_id}'`,(error,results) => {
+      if(error){
+          throw error;
+      }
+      else{
+        //  console.log(results);
+          res.status(201).send(results);
+      }
+  });
+});
+
+app.get('/emptyBasket', (req,res) => {
+  db.query('USE project');
+
+
+  db.query(`DELETE FROM basket_items WHERE customer_id = '${user_id}'`,(error,results) => {
+      if(error){
+          throw error;
+      }
+      else{
+       //   console.log(results);
+          res.status(201).send(results);
+      }
+  });
+});
+
+
 
 
 

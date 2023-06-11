@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="Dashboard.css">
     <title>COMP306</title>
     <script type="text/javascript" src="middle.js"></script>
+    <script type="text/javascript" src="basket.js"></script>
 </head>
 
 <body>
@@ -25,16 +26,28 @@
     </select>
 
     <input type="button" value="List products" onclick="productsby()">
+
+    <input type="button" value="Go To Basket" onclick="goToBasket(); fillTable()">
+
     <table id="Products" style="display:none">
             <tr>
                 <th>Name</th>
-                <th>Price</th>
+                <th>Brand</th>
                 <th>Category</th>
                 <th> </th>
             </tr>
         
     </table>
-
+    <table id="ProductsWithId" style="display:none">
+        <caption id="table_title"></caption>
+        <tr>
+            <th>Supplier</th>
+            <th>Price</th>
+            <th>Stock</th>
+            <th> </th>
+        </tr>
+    
+</table>
 
 
 </body>

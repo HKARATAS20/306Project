@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="Dashboard.css">
+    <title>COMP306</title>
+    <script type="text/javascript" src="basket.js"></script>
+</head>
+
+<body>
+
+    <h1>Your Basket</h1>
+
+    <input type="button" value="Continue Shopping" onclick="continueShopping()">
+    
+    <table id="Basket" style="display:block">
+            <tr>
+                <th>Name</th>
+                <th>Supplier</th>
+                <th>Quantity</th>
+                <th>Price</th>
+            </tr>
+        
+    </table>
+
+    <script type="text/javascript">
+        fillTable();
+    </script>
+    <div style="display: flex;">
+        <input type="button" value="Clear Basket" onclick="emptyBasket()">
+        <input type="button" value="Buy" onclick="checkout()" style="margin-left: 20%;">
+    </div>
+    
+
+</body>
+
+</html>
