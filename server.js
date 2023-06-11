@@ -67,6 +67,26 @@ app.get('/productsby', (req,res) => {
   });
 });
 
+
+app.get('/productsbyId', (req,res) => {
+  db.query('USE project');
+  const{id} = req.query;
+  console.log("id",id);
+
+  const query = byId(id);
+
+  db.query(query,(error,results) => {
+      if(error){
+          throw error;
+      }
+      else{
+        //console.log(results);
+          res.status(201).send(results);
+      }
+  });
+});
+
+
 app.get('/products', (req,res) => {
     db.query('USE project');
     //const{first,second} = req.query;
@@ -82,6 +102,7 @@ app.get('/products', (req,res) => {
         else{
           //console.log(results);
             res.status(201).send(results);
+
         }
     });
   });
@@ -121,12 +142,37 @@ function contains(val, col_name, table_name){
 function bycategory(category){
     var query = "";
     if(category == "All"){
-        query = "SELECT * FROM products";
+      query = `SELECT p.name, p.category, p.description, MIN(sp.price) AS min_price
+      FROM products p
+      JOIN supplier_product sp ON p.product_id = sp.product_id
+      GROUP BY p.name, p.category, p.description`
     }  
     else{
-        query = `SELECT * FROM products where category = '${category}' `
+
+      query = `SELECT p.name, p.category, p.description, MIN(sp.price) AS min_price
+      FROM products p
+      JOIN supplier_product sp ON p.product_id = sp.product_id
+      WHERE category = '${category}'
+      GROUP BY p.name, p.category, p.description`
+
+
     }
     return query;
+}
+function byId(id){
+  var query = "";
+
+  
+
+    query = `SELECT p.name, p.category, p.description, sp.price
+    FROM products p
+    JOIN supplier_product sp ON p.product_id = sp.product_id
+    GROUP BY p.name, p.category, p.description, sp.price`
+
+
+  
+  return query;
+  // WHERE p.product_id = '${id}'
 }
 
 

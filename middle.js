@@ -1,5 +1,5 @@
 
-
+var product_id;
 function productsby() {
     var category = document.getElementById("Category-select").value;
     fetch('http://localhost:3000/productsby?category=' + category)
@@ -21,11 +21,11 @@ function productsby() {
         var cell4 = row.insertCell(3);
 
         cell1.innerHTML = products[i].name;
-        cell2.innerHTML = products[i].price;
+        cell2.innerHTML = products[i].min_price;
         cell3.innerHTML = products[i].category;
 
         var showButton = document.createElement("button");
-        showButton.innerHTML = "Show Description";
+        showButton.innerHTML = "Product Page";
         showButton.addEventListener("click", createShowDescriptionHandler(products[i]));
         cell4.appendChild(showButton);
       }
@@ -35,8 +35,84 @@ function productsby() {
 
 function createShowDescriptionHandler(product) {
   return function() {
-    showProductDetails(product);
+    changeWindow(product)
+    //showProductDetails(product);
   };
+}
+
+function changeWindow(product) {
+
+  window.location.href = "../productPage.html";
+  console.log("bunu gör amk lütferm");
+
+  console.log(product.product_id);
+  fetch('http://localhost:3000/productsbyId?id=' + product.product_id)
+  .then(function(response){
+    return response.json();
+    })
+  .then(function(products){
+    var table = document.getElementById("Products");
+    for(var i = table.rows.length -1; i > 0;i--){
+      table.deleteRow(i);
+    }
+    console.log(products);
+    //console.log(products[0].Name);
+    for(var i = 0; i < products.length; i++){
+      var row = table.insertRow(i+1);
+      var cell1 = row.insertCell(0);
+      var cell2 = row.insertCell(1);
+      var cell3 = row.insertCell(2);
+      var cell4 = row.insertCell(3);
+
+      cell1.innerHTML = products[i].name;
+      cell2.innerHTML = products[i].min_price;
+      cell3.innerHTML = products[i].category;
+
+      var showButton = document.createElement("button");
+      showButton.innerHTML = "Product Page";
+      showButton.addEventListener("click", createShowDescriptionHandler(products[i]));
+      cell4.appendChild(showButton);
+    }
+    table.style.display = "block";
+    });
+
+  
+}
+
+function productsbyId(){
+  console.log("productsbyId");
+
+
+  console.log(product.product_id);
+  fetch('http://localhost:3000/productsbyId?id=' + product.min_price)
+  .then(function(response){
+    return response.json();
+    })
+  .then(function(products){
+    var table = document.getElementById("Products");
+    for(var i = table.rows.length -1; i > 0;i--){
+      table.deleteRow(i);
+    }
+    console.log(products);
+    //console.log(products[0].Name);
+    for(var i = 0; i < products.length; i++){
+      var row = table.insertRow(i+1);
+      var cell1 = row.insertCell(0);
+      var cell2 = row.insertCell(1);
+      var cell3 = row.insertCell(2);
+      var cell4 = row.insertCell(3);
+
+      cell1.innerHTML = products[i].name;
+      cell2.innerHTML = products[i].min_price;
+      cell3.innerHTML = products[i].category;
+
+      var showButton = document.createElement("button");
+      showButton.innerHTML = "Product Page";
+      showButton.addEventListener("click", createShowDescriptionHandler(products[i]));
+      cell4.appendChild(showButton);
+    }
+    table.style.display = "block";
+    });
 }
 
 function showProductDetails(product) {
