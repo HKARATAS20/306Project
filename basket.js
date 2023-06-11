@@ -85,29 +85,34 @@ function checkout() {
                 })
                 .then(data2 => {
                     alert("Data added successfully!")
-                })
-                .catch(error => console.error(error));
-/*
-        for(i = 0; i < products.length; i++){
-            
-            var data = { product_id, supplier_id, quantity, price};
 
-                fetch("http://localhost:3000/checkout", {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-                })
-                .then(data => {
-                    alert("Data added successfully!")
-                    window.location.href = "../login.html";
+                    for(i = 0; i < products.length; i++){
+                        var product_id = products[i].product_id;
+                        var supplier_id = products[i].supplier_id;
+                        var quantity = products[i].quantity;
+                        var price = products[i].price;
 
-                })
-                .catch(error => console.error(error));
-                    }
+                        var data = { product_id, supplier_id, quantity, price};
 
-                    */
+                    fetch("http://localhost:3000/addItems", {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(data)
+                        })
+                        .then(data => {
+                            //alert("Data added successfully!")
+                            emptyBasket();
+                        })
+                        .catch(error => console.error(error));
+                            }
+                        })
+                        .catch(error => console.error(error));
+
+        
+
+                    
     });
     
 

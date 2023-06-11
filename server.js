@@ -17,6 +17,7 @@ app.use(bodyParser.json());
 app.use(express.static(__dirname));
 
 var user_id;
+var order_id;
 
 // Create a MySQL connection pool
 const db = mysql.createConnection({
@@ -200,28 +201,35 @@ app.post('/checkout', (req, res) => {
   
   const { total } = req.body;
   var address;
-  var order_id;
 
-  db.query(`SELECT * FROM customers WHERE customer_id = '${user_id}'`,(error, results) => {
-    if(error){
-        throw error;
-    }
-    else {
-        address = results[0].address;
-        console.log(address);
+  db.query(`SELECT * FROM customers WHERE customer_id = '${user_id}'`, (error, customerResults) => {
+    if (error) {
+      throw error;
+    } else {
+      const address = customerResults[0].address;
+      console.log(address);
+  
+      db.query(`INSERT INTO orders (customer_id, order_date, shipping_address, total_amount) VALUES (?, CURRENT_DATE(), ?, ?)`, 
+              [user_id,address, total], (error, results) => {
+              if (error) throw error;
+                res.send('Data added successfully!');
+
+                db.query(`SELECT LAST_INSERT_ID();`, (error, lastInsertIdResults) => {
+                  if (error) {
+                    throw error;
+                  } else {
+                    console.log(lastInsertIdResults);
+                    order_id = lastInsertIdResults[0]['LAST_INSERT_ID()'];
+                    console.log("Order_id: ", order_id);
+                  }
+                });
+
+              });
+
+      
     }
   });
-
-
-  db.query(`SELECT LAST_INSERT_ID();`,(error,results) => {
-    if(error){
-        throw error;
-    }
-    else{
-        order_id = results;
-    }
-  });
-  console.log(address);
+  
   /*db.query(`INSERT INTO orders (customer_id, order_date , shipping_address, total_amount) VALUES (?, CURRENT_DATE(), "?", ?)`, 
             [user_id,address, total], (error, results) => {
     if (error) throw error;
@@ -231,11 +239,12 @@ app.post('/checkout', (req, res) => {
 
 });
 
-app.get('/addItems', (req, res) => {
+app.post('/addItems', (req, res) => {
 
   const  { product_id, supplier_id, quantity, price } = req.body;
 
-  db.query(`INSERT INTO order_items (order_id,last_name, email, address) VALUES (?, ?, ?, ?)`, [first_name, last_name, email, address], (error, results) => {
+  db.query(`INSERT INTO order_items (order_id, product_id, supplier_id, quantity, price) VALUES (?, ?, ?, ?, ?)`,
+   [order_id, product_id, supplier_id, quantity, price], (error, results) => {
     if (error) throw error;
     res.send('Data added successfully!');
   });
