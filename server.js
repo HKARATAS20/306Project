@@ -157,9 +157,6 @@ function byId(id){
     JOIN suppliers s ON s.supplier_id = sp.supplier_id
     WHERE p.product_id = '${id}'
     GROUP BY supplier_name ,sp.supplier_id, p.product_id, p.category, p.description, sp.price`
-
-
-  
   return query;
   // WHERE p.product_id = '${id}'
 }
