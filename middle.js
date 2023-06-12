@@ -4,11 +4,11 @@ function productsby() {
     var category = document.getElementById("Category-select").value;
 
 
-    var alLProducts = document.getElementById("Products");
+    var allProducts = document.getElementById("Products");
     var selectProducts = document.getElementById("ProductsWithId");
 
   
-    alLProducts.style.display = "block";
+    allProducts.style.display = "block";
     selectProducts.style.display = "none";
 
 
@@ -198,4 +198,38 @@ function goToBasket() {
   window.location.href = "../basket.html";
 
 
+}
+
+function initialCategory() {
+  const categorySelect = document.getElementById('Category-select');
+
+      const defaultValue = 'All';
+
+      const defaultOption = document.createElement('option');
+      defaultOption.value = defaultValue;
+      defaultOption.textContent = defaultValue;
+      defaultOption.selected = true; 
+      categorySelect.appendChild(defaultOption);
+
+}
+
+function fillCategories() {
+    
+    fetch('http://localhost:3000/fillCategories')
+    .then(function(response){
+      return response.json();
+    })
+    .then(function(categories){
+    
+      const categorySelect = document.getElementById('Category-select');
+
+      for (let i = 0; i < categories.length; i++) {
+        const option = document.createElement('option');
+        option.value = categories[i].category;
+        option.textContent = categories[i].category;
+        categorySelect.appendChild(option);
+      }
+    });   
+
+  
 }
