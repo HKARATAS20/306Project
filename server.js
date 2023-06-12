@@ -120,7 +120,7 @@ function contains(val, col_name, table_name){
     if (err) {
         console.log(err);
     }
-    db.query('use world');
+    db.query('use project');
     
     db.query(`SELECT COUNT(*) FROM ${table_name} WHERE ${col_name} = '${val}'`, (err,result) => {
       if(err){
@@ -266,7 +266,8 @@ app.get('/getUser', (req,res) => {
 app.get('/fillOrders', (req,res) => {
   db.query('USE project');
 
-  db.query(`select products.name as product_name, order_items.quantity, order_items.price, orders.order_date, orders.shipping_address, suppliers.name as supplier_name
+  db.query(`select products.name as product_name, order_items.quantity, order_items.price, orders.order_date,
+            suppliers.supplier_id as supplier_id, orders.shipping_address, suppliers.name as supplier_name
   from order_items
   join orders on orders.order_id = order_items.order_id
   join products on order_items.product_id = products.product_id

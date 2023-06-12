@@ -24,6 +24,7 @@ function fillOrderTable() {
         var cell4 = row.insertCell(3);
         var cell5 = row.insertCell(4);
         var cell6 = row.insertCell(5);
+        var cell7 = row.insertCell(6);
 
         const formattedDate = products[i].order_date.substring(0, 10);
 
@@ -33,8 +34,44 @@ function fillOrderTable() {
         cell4.innerHTML = formattedDate;
         cell5.innerHTML = products[i].shipping_address;
         cell6.innerHTML = products[i].supplier_name;
+
+        var addButton = document.createElement("button");
+        addButton.innerHTML = "Rate Product";
+        addButton.addEventListener("click", rateProductHandler(products[i]));
+        product_id = products[i].product_id;
+        cell7.appendChild(addButton);
       }
       table.style.display = "block";
     });   
 
 }
+function rateProductHandler(product) {
+  return function() {
+    rateProduct(product)
+  };
+}
+
+function rateProduct(product) {
+  // Implement your "Add to Cart" logic here
+  const product_id = product.product_id;
+  const supplier_id = product.supplier_id;
+  const quantity = 1;
+  const price = product.price;
+  console.log(product);
+
+  const data = { product_id, supplier_id, quantity, price };
+
+  /*fetch("http://localhost:3000/addToBasket", {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  })
+    .then(data => {
+      alert("Data added successfully!")
+
+    })
+    .catch(error => console.error(error));*/
+}
+
