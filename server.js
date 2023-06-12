@@ -171,8 +171,9 @@ function byId(id){
 
 app.post('/addUser', (req, res) => {
   db.query('USE project');
-  const { first_name, last_name, email, address } = req.body;
-  db.query(`INSERT INTO customers (first_name,last_name, email, address) VALUES (?, ?, ?, ?)`, [first_name,last_name, email, address], (error, results) => {
+  const { first_name, last_name, email, address, city } = req.body;
+  db.query(`INSERT INTO customers (first_name,last_name, email, address, city) VALUES (?, ?, ?, ?, ?)`, 
+  [first_name,last_name, email, address, city], (error, results) => {
     if (error) throw error;
     res.send('Data added successfully!');
   });
