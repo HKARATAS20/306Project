@@ -13,11 +13,19 @@
 
 <body>
 
-    <h1>Welcome To çakma Amazon</h1>
-    <input type="button" value="My Orders" onclick="goToOrders()" style="margin-left: 85%;">
+    <h1>Welcome To Amazor</h1>
+    <div class="container">
+        <label for="Category-select">Choose a category:</label>
+        <select class="list-product" id="Category-select"></select>
+        <input class="list-product" type="button" value="List products" onclick="productsby()">
 
-    <label for="Category-select">Choose a category:</label>
-    <select id="Category-select"></select>
+        <div class="button-container">
+            <input class="first-button" type="button" value="Go To Basket" onclick="goToBasket()">
+            <input class="first-button" type="button" value="My Orders" onclick="goToOrders()">
+        </div>
+        
+    </div>
+
     
     <script type="text/javascript">initialCategory();</script>
     <script type="text/javascript">fillCategories();</script>
