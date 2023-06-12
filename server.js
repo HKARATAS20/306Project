@@ -16,6 +16,7 @@ app.use(bodyParser.json());
 
 app.use(express.static(__dirname));
 
+var supplier_id;
 var user_id;
 var order_id;
 
@@ -116,29 +117,18 @@ function products() {
 
 
 function contains(val, col_name, table_name){
-  db.connect((err) => {
-    if (err) {
-        console.log(err);
-    }
-    db.query('use world');
-    
-    db.query(`SELECT COUNT(*) FROM ${table_name} WHERE ${col_name} = '${val}'`, (err,result) => {
-      if(err){
-          throw err;
-      }
-      const { 'COUNT(*)': count } = result[0];
-      console.log("result",result )
-      if(count > 0){
-        console.log("true");
-        return true;
-      }
-      else{
-      console.log("false");
+  const query = `SELECT COUNT(*) AS count FROM ${table_name} WHERE ${col_name} = '${val}'`;
+  db.query(query, (error, results, fields) => {
+    if (error) {
+      console.error(error);
       return false;
-      }
-    });
-  }
-)};
+    }
+    const count = results[0].count;
+    const result = count > 0;
+    console.log(result);
+    return count > 0;
+  });
+};
 
 function bycategory(category){
     var query = "";
@@ -184,6 +174,61 @@ app.post('/addUser', (req, res) => {
   });
 });
 
+app.post('/addSupplier', (req, res) => {
+  db.query('USE project');
+  const { supplier_name, email } = req.body;
+  db.query(`INSERT INTO suppliers (name, contact_email) VALUES (?, ?)`, [supplier_name, email], (error, results) => {
+    if (error) throw error;
+    res.send('Data added successfully!');
+  });
+});
+
+app.post('/addProducts', (req, res) => {
+  db.query('USE project');
+  const { product_name, price, stock, category, description, brand } = req.body;
+
+  const query = `SELECT COUNT(*) AS count FROM products WHERE name = '${product_name}'`;
+  db.query(query, (error, results, fields) => {
+    if (error) {
+      console.error(error);
+      return false;
+    }
+    const count = results[0].count;
+    const result = count > 0;
+    console.log("Contains func result: ", result);
+    
+    if (result == false) {
+        db.query(`INSERT INTO products (name, description, category, stock, brand) VALUES (?, ?, ?, 1, ?)`,
+      [product_name, description, category, brand], (error, results) => {
+        if (error) throw error;
+
+        db.query(`SELECT LAST_INSERT_ID();`, (error, lastInsertIdResults) => {
+          db.query(`INSERT INTO supplier_product (supplier_id, product_id, price, stock) VALUES (?, ?, ?, ?)`,
+          [supplier_id, lastInsertIdResults[0]['LAST_INSERT_ID()'], price, stock], (error, results) => {
+            if (error) throw error;
+            res.send('Data added successfully!');
+          });
+        });
+      });
+    }
+    else {
+      db.query(`SELECT product_id from products where name = "${product_name}"`, (error, results) => {
+        if (error) throw error;
+        console.log("Results:", results);
+        console.log("Resultus[0]: ", results[0]);
+        
+        db.query(`INSERT INTO supplier_product (supplier_id, product_id, price, stock) VALUES (?, ?, ?, ?)`,
+         [supplier_id, results[0].product_id, price, stock], (error, results) => {
+          if (error) throw error;
+          res.send('Data added successfully!');
+        });
+  
+      })
+    }
+
+  });
+  
+});
 
 app.post('/addToBasket', (req, res) => {
   db.query('USE project');
@@ -192,6 +237,14 @@ app.post('/addToBasket', (req, res) => {
           [user_id, product_id, supplier_id, quantity, price], (error, results) => {
     if (error) throw error;
     res.send('Data added successfully!');
+  });
+});
+
+app.get('/emptyBasket', (req, res) => {
+  db.query('USE project');
+  db.query(`DELETE FROM basket_items WHERE customer_id = ${user_id};`,  (error, results) => {
+    if (error) throw error;
+    res.send('Data deleted successfully!');
   });
 });
 
@@ -225,8 +278,6 @@ app.post('/checkout', (req, res) => {
                 });
 
               });
-
-      
     }
   });
   
@@ -239,7 +290,12 @@ app.post('/addItems', (req, res) => {
   db.query(`INSERT INTO order_items (order_id, product_id, supplier_id, quantity, price) VALUES (?, ?, ?, ?, ?)`,
    [order_id, product_id, supplier_id, quantity, price], (error, results) => {
     if (error) throw error;
-    res.send('Data added successfully!');
+
+    db.query(`UPDATE supplier_product SET stock = stock - ${quantity} WHERE product_id = ${product_id} AND supplier_id = ${supplier_id}`,
+     (error, results) => {
+      if (error) throw error;
+      res.send("Data added successfully!");
+    });
   });
 })
 
@@ -248,15 +304,48 @@ app.get('/getUser', (req,res) => {
   const{email} = req.query;
   console.log("user email",email);
 
-
   db.query(`SELECT * FROM customers WHERE email = '${email}'`,(error,results) => {
       if(error){
           throw error;
       }
       else{
-
           user_id = results[0].customer_id;
           console.log(user_id);
+          res.status(201).send(results);
+      }
+  });
+});
+
+app.get('/getSupplier', (req,res) => {
+  db.query('USE project');
+  const{email} = req.query;
+  console.log("Supplier email",email);
+
+  db.query(`SELECT * FROM suppliers WHERE contact_email = '${email}'`,(error,results) => {
+      if(error){
+          throw error;
+      }
+      else{
+          supplier_id = results[0].supplier_id;
+          console.log(supplier_id);
+          res.status(201).send(results);
+      }
+  });
+});
+
+
+app.get('/fillProducts', (req,res) => {
+  db.query('USE project');
+
+  db.query(`select products.name as product_name, supplier_product.product_id, supplier_product.price, supplier_product.stock
+  from supplier_product
+  join products on products.product_id = supplier_product.product_id
+  where supplier_id ='${supplier_id}'`,(error,results) => {
+      if(error){
+          throw error;
+      }
+      else{
+          console.log(results);
           res.status(201).send(results);
       }
   });
@@ -285,7 +374,6 @@ app.get('/fillOrders', (req,res) => {
 
 app.get('/fillBasket', (req,res) => {
   db.query('USE project');
-
 
   db.query(`SELECT b.*, p.name , s.name as supplier_name, (SELECT SUM(price) FROM basket_items WHERE customer_id = ${user_id}) as total
           FROM basket_items b
