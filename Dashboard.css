@@ -136,4 +136,16 @@ body {
     margin-left: 3%;
   }
   
+  .table-container {
+    display: flex;
+    justify-content: space-between;
+  }
+  .first-container {
+    display: flex;
+    justify-content: space-between;
+  }
   
+  table {
+    width: 48%;
+  }
+

@@ -30,7 +30,12 @@
     <script type="text/javascript">initialCategory();</script>
     <script type="text/javascript">fillCategories();</script>
 
-    <table id="Products" style="display:none">
+    <input type="button" value="List products" onclick="productsby()">
+
+    <input type="button" value="Go To Basket" onclick="goToBasket()">
+
+    <div class="first-container">
+        <table id="Products" style="display:none">
             <tr>
                 <th>Name</th>
                 <th>Price</th>
@@ -39,15 +44,38 @@
                 <th> </th>
             </tr>
         
+        </table>
+        <table id="MostPurchased" style="display:none;">
+            <caption id="most_purchased_table">Most Purchased</caption>
+            <tr>
+                <th>Product Name</th>
+                <th>Number of Purchases</th>
+            </tr>
+        </table>
+    </div>
+    
+
+    <div class="table-container">
+        <table id="ProductsWithId" style="display:none">
+            <caption id="table_title"></caption>
+            <tr>
+                <th>Supplier</th>
+                <th>Price</th>
+                <th>Stock</th>
+                <th>Supplier Rating</th>
+            </tr>
+        
+        </table>
+        <table id="FrequentsWithId" style="display:none;">
+            <caption id="frequent_table">Frequently Bought Together</caption>
+            <tr>
+                <th>Product Name</th>
+                <th> </th>
+            </tr>
+        </table>
+
     </table>
-    <table id="ProductsWithId" style="display:none">
-        <caption id="table_title"></caption>
-        <tr>
-            <th>Supplier</th>
-            <th>Price</th>
-            <th>Stock</th>
-            <th>Supplier Rating</th>
-        </tr>
+    </div>
     
 </table>
 <script type="text/javascript">

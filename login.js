@@ -3,9 +3,9 @@ function addData() {
     var last_name = document.getElementById("surname").value;
     var email = document.getElementById("email").value;
     var address = document.getElementById("address").value;
+    var city = document.getElementById("city").value;
 
-
-    const data = { first_name, last_name, email, address };
+    const data = { first_name, last_name, email, address, city };
 
     fetch("http://localhost:3000/addUser", {
       method: 'POST',

@@ -171,8 +171,9 @@ function byId(id){
 
 app.post('/addUser', (req, res) => {
   db.query('USE project');
-  const { first_name, last_name, email, address } = req.body;
-  db.query(`INSERT INTO customers (first_name,last_name, email, address) VALUES (?, ?, ?, ?)`, [first_name,last_name, email, address], (error, results) => {
+  const { first_name, last_name, email, address, city } = req.body;
+  db.query(`INSERT INTO customers (first_name,last_name, email, address, city) VALUES (?, ?, ?, ?, ?)`, 
+  [first_name,last_name, email, address, city], (error, results) => {
     if (error) throw error;
     res.send('Data added successfully!');
   });
@@ -326,7 +327,6 @@ app.post('/addItems', (req, res) => {
 
 app.post('/addRating', (req, res) => {
   db.query('USE project'); 
-  console.log("Ratingin içi burası");
   const { product_id, supplier_id, rating } = req.body;
   db.query(`INSERT INTO ratings (customer_id, product_id, supplier_id, rating) VALUES ( ?, ?, ?, ?)`, 
           [user_id, product_id, supplier_id, rating], (error, results) => {
@@ -444,8 +444,58 @@ app.get('/fillCategories', (req,res) => {
 
 
 
+app.get('/frequentlyBought', (req,res) => {
+  db.query('USE project');
+  const{id} = req.query;
+  console.log("frqntly bouhght id",id);
+
+  const query = `SELECT p1.name AS product_name, COUNT(*) AS frequency
+  FROM order_items oi1
+  JOIN order_items oi2 ON oi1.order_id = oi2.order_id 
+                       AND oi1.product_id != oi2.product_id 
+                       AND oi2.product_id = ${id}
+                       AND oi1.product_id < oi2.product_id 
+  JOIN products p1 ON oi1.product_id = p1.product_id
+  GROUP BY oi1.product_id, oi2.product_id, p1.name
+  ORDER BY frequency DESC
+  LIMIT 2;`
+
+  db.query(query,(error,results) => {
+      if(error){
+          throw error;
+      }
+      else{
+        console.log(results);
+          res.status(201).send(results);
+      }
+  });
+});
 
 
+app.get('/mostPurchased', (req,res) => {
+  db.query('USE project');
+  const{category} = req.query;
+
+
+  const query = `SELECT p.product_id, p.name, COUNT(*) AS total_purchases
+  FROM products p
+  JOIN order_items oi ON p.product_id = oi.product_id
+  JOIN orders o ON oi.order_id = o.order_id
+  WHERE p.category= '${category}'
+  GROUP BY p.product_id
+  ORDER BY total_purchases DESC
+  LIMIT 1;`
+
+  db.query(query,(error,results) => {
+      if(error){
+          throw error;
+      }
+      else{
+        console.log(results);
+          res.status(201).send(results);
+      }
+  });
+});
 
 
 

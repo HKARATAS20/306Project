@@ -17,33 +17,67 @@ function productsby() {
       return response.json();
     })
     .then(function(products){
-      var table = document.getElementById("Products");
-      for(var i = table.rows.length -1; i > 0;i--){
-        table.deleteRow(i);
-      }
-      console.log(products);
-      //console.log(products[0].Name);
-      for(var i = 0; i < products.length; i++){
-        var row = table.insertRow(i+1);
-        var cell1 = row.insertCell(0);
-        var cell2 = row.insertCell(1);
-        var cell3 = row.insertCell(2);
-        var cell4 = row.insertCell(3);
-        var cell5 = row.insertCell(4);
 
-        cell1.innerHTML = products[i].name;
-        cell2.innerHTML = products[i].min_price;
-        cell3.innerHTML = products[i].category;
-        cell4.innerHTML = products[i].avg_rating;
 
-        var showButton = document.createElement("button");
-        showButton.innerHTML = "Product Page";
 
-        showButton.addEventListener("click", createShowDescriptionHandler(products[i]));
-        product_id = products[i].product_id;
-        cell5.appendChild(showButton);
-      }
-      table.style.display = "block";
+
+      fetch('http://localhost:3000/mostPurchased?category=' + category)
+      .then(function(response){
+        return response.json();
+      })
+      .then(function(mostPurchased){
+
+        var mostTable = document.getElementById("MostPurchased");
+
+        var freqTable = document.getElementById("FrequentsWithId");
+        var table = document.getElementById("Products");
+        for(var i = table.rows.length -1; i > 0;i--){
+          table.deleteRow(i);
+        }
+
+        for(var i = mostTable.rows.length -1; i > 0;i--){
+          mostTable.deleteRow(i);
+        }
+
+        if (mostPurchased.length <= 0) {
+          mostTable.style.display = "none";
+        }
+        else {
+          for(var i = 0; i < mostPurchased.length; i++){
+            var row = mostTable.insertRow(i+1);
+            var cell1 = row.insertCell(0);
+            var cell2 = row.insertCell(1);
+            cell1.innerHTML = mostPurchased[i].name;
+            cell2.innerHTML = mostPurchased[i].total_purchases;
+          }
+          mostTable.style.display = "block";
+        }
+        console.log(products);
+        //console.log(products[0].Name);
+        for(var i = 0; i < products.length; i++){
+          var row = table.insertRow(i+1);
+          var cell1 = row.insertCell(0);
+          var cell2 = row.insertCell(1);
+          var cell3 = row.insertCell(2);
+          var cell4 = row.insertCell(3);
+          var cell5 = row.insertCell(4);
+
+          cell1.innerHTML = products[i].name;
+          cell2.innerHTML = products[i].min_price;
+          cell3.innerHTML = products[i].category;
+          cell4.innerHTML = products[i].avg_rating;
+
+          var showButton = document.createElement("button");
+          showButton.innerHTML = "Product Page";
+
+          showButton.addEventListener("click", createShowDescriptionHandler(products[i]));
+          product_id = products[i].product_id;
+          cell5.appendChild(showButton);
+        }
+        table.style.display = "block";
+        freqTable.style.display = "none";
+      });
+
     });
 }
 
@@ -85,12 +119,30 @@ function addProducts(product) {
       return response.json();
     })
     .then(function(products){
+
+
+      fetch('http://localhost:3000/frequentlyBought?id=' + product_id)
+      .then(function(response){
+        return response.json();
+      })
+      .then(function(result){
+
+        console.log(result);
+
+      var mostTable = document.getElementById("MostPurchased");
+      var freqTable = document.getElementById("FrequentsWithId");
+      for(var i = freqTable.rowslength - 1; i > 0;i--){
+          freqTable.deleteRow(i);
+        }
+        for(var i = 0; i < result.length; i++){
+          var row = freqTable.insertRow(i+1);
+          var cell1 = row.insertCell(0);
+          cell1.innerHTML = result[i].product_name;
+        }
       var table = document.getElementById("ProductsWithId");
       for(var i = table.rows.length -1; i > 0;i--){
         table.deleteRow(i);
       }
-      console.log(products);
-      //console.log(products[0].Name);
       for(var i = 0; i < products.length; i++){
         var row = table.insertRow(i+1);
         var cell1 = row.insertCell(0);
@@ -113,7 +165,10 @@ function addProducts(product) {
         product_id = products[i].product_id;
         cell5.appendChild(addButton);
       }
+      freqTable.style.display = "block";
       table.style.display = "block";
+      mostTable.style.display = "none";
+    });
     });
 
 }
