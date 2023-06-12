@@ -34,7 +34,9 @@ function productsby() {
         for(var i = table.rows.length -1; i > 0;i--){
           table.deleteRow(i);
         }
-
+        for(var i = table.rows.length -1; i > 0;i--){
+          freqTable.deleteRow(i);
+        }
         for(var i = mostTable.rows.length -1; i > 0;i--){
           mostTable.deleteRow(i);
         }
