@@ -104,6 +104,8 @@ function checkout() {
                         .then(data => {
                             //alert("Data added successfully!")
                             emptyBasket();
+
+                            window.location.href = "../checkout.html";
                         })
                         .catch(error => console.error(error));
                             }
