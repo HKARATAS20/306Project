@@ -16,6 +16,7 @@ app.use(bodyParser.json());
 
 app.use(express.static(__dirname));
 
+var supplier_id;
 var user_id;
 var order_id;
 
@@ -184,6 +185,14 @@ app.post('/addUser', (req, res) => {
   });
 });
 
+app.post('/addSupplier', (req, res) => {
+  db.query('USE project');
+  const { supplier_name, email } = req.body;
+  db.query(`INSERT INTO suppliers (name, contact_email) VALUES (?, ?)`, [supplier_name, email], (error, results) => {
+    if (error) throw error;
+    res.send('Data added successfully!');
+  });
+});
 
 app.post('/addToBasket', (req, res) => {
   db.query('USE project');
@@ -225,8 +234,6 @@ app.post('/checkout', (req, res) => {
                 });
 
               });
-
-      
     }
   });
   
@@ -254,7 +261,6 @@ app.get('/getUser', (req,res) => {
           throw error;
       }
       else{
-
           user_id = results[0].customer_id;
           console.log(user_id);
           res.status(201).send(results);
@@ -262,6 +268,23 @@ app.get('/getUser', (req,res) => {
   });
 });
 
+app.get('/getSupplier', (req,res) => {
+  db.query('USE project');
+  const{email} = req.query;
+  console.log("Supplier email",email);
+
+
+  db.query(`SELECT * FROM suppliers WHERE contact_email = '${email}'`,(error,results) => {
+      if(error){
+          throw error;
+      }
+      else{
+          supplier_id = results[0].supplier_id;
+          console.log(supplier_id);
+          res.status(201).send(results);
+      }
+  });
+});
 
 app.get('/fillOrders', (req,res) => {
   db.query('USE project');

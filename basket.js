@@ -61,7 +61,6 @@ function emptyBasket() {
 
 }
 
-
 function checkout() {
     // Should do everythig or something
     // Should add all the items in the basket to the order_items and delete the basket.
