@@ -12,7 +12,9 @@
     <h1>Welcome to my homepage</h1>
 
     <button onclick="showForm('create')">Create User</button>
+    <button onclick="showForm('create-supplier')">Create Supplier</button>
     <button onclick="showForm('query')">Login</button>
+    <button onclick="showForm('supplier-query')">Supplier Login</button>
 
     <form id="create-form">
       <h2>Create User</h2>
@@ -27,11 +29,27 @@
       <input type="button" value="Submit" onclick="addData()">
     </form>
 
+    <form id="supplier-create-form">
+      <h2>Create User</h2>
+      <label for="supplier-name">Supplier Name</label>
+      <input type="text" id="supplier-name" name="supplier-name"><br><br>
+      <label for="supplier-email">Contact Email</label>
+      <input type="text" id="supplier-email" name="supplier-email"><br><br>
+      <input type="button" value="Submit" onclick="addSupplierData()">
+    </form>
+
     <form id="login-form">
       <h2>login</h2>
       <label for="login-email">Email</label>
       <input type="text" id="login-email" name="login-email"><br><br>
       <input type="button" value="Submit" onclick="queryData()">
+    </form>
+
+    <form id="supplier-login-form">
+      <h2>login</h2>
+      <label for="supplier-login-email">Email</label>
+      <input type="text" id="supplier-login-email" name="supplier-login-email"><br><br>
+      <input type="button" value="Submit" onclick="supplierQueryData()">
     </form>
 
     <script>
@@ -40,8 +58,17 @@
         if (action === 'create') {
           document.getElementById('create-form').classList.add('show');
           document.getElementById('login-form').classList.remove('show');
-        } else if (action === 'query') {
+        }
+        else if (action === 'create-supplier') {
+          document.getElementById('supplier-create-form').classList.add('show');
+          document.getElementById('create-form').classList.remove('show');
+        } 
+        else if (action === 'query') {
           document.getElementById('login-form').classList.add('show');
+          document.getElementById('create-form').classList.remove('show');
+        }
+        else if (action === 'supplier-query') {
+          document.getElementById('supplier-login-form').classList.add('show');
           document.getElementById('create-form').classList.remove('show');
         }
       }
