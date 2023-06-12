@@ -29,16 +29,19 @@ function productsby() {
         var cell2 = row.insertCell(1);
         var cell3 = row.insertCell(2);
         var cell4 = row.insertCell(3);
+        var cell5 = row.insertCell(4);
 
         cell1.innerHTML = products[i].name;
         cell2.innerHTML = products[i].min_price;
         cell3.innerHTML = products[i].category;
+        cell4.innerHTML = products[i].avg_rating;
 
         var showButton = document.createElement("button");
         showButton.innerHTML = "Product Page";
+
         showButton.addEventListener("click", createShowDescriptionHandler(products[i]));
         product_id = products[i].product_id;
-        cell4.appendChild(showButton);
+        cell5.appendChild(showButton);
       }
       table.style.display = "block";
     });
@@ -94,16 +97,21 @@ function addProducts(product) {
         var cell2 = row.insertCell(1);
         var cell3 = row.insertCell(2);
         var cell4 = row.insertCell(3);
+        var cell5 = row.insertCell(4);
+
 
         cell1.innerHTML = products[i].supplier_name;
         cell2.innerHTML = products[i].price;
         cell3.innerHTML = products[i].category;
+        cell4.innerHTML = products[i].supplier_rating;
+
+        
 
         var addButton = document.createElement("button");
         addButton.innerHTML = "Add To Basket";
         addButton.addEventListener("click", addToCartHandler(products[i]));
         product_id = products[i].product_id;
-        cell4.appendChild(addButton);
+        cell5.appendChild(addButton);
       }
       table.style.display = "block";
     });

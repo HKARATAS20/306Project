@@ -1,3 +1,6 @@
+var product_id;
+var supplier_id;
+
 function goToOrders() {
     window.location.href = "../orders.html";
 }
@@ -24,6 +27,7 @@ function fillOrderTable() {
         var cell4 = row.insertCell(3);
         var cell5 = row.insertCell(4);
         var cell6 = row.insertCell(5);
+        var cell7 = row.insertCell(6);
 
         const formattedDate = products[i].order_date.substring(0, 10);
 
@@ -33,8 +37,59 @@ function fillOrderTable() {
         cell4.innerHTML = formattedDate;
         cell5.innerHTML = products[i].shipping_address;
         cell6.innerHTML = products[i].supplier_name;
+
+        var addButton = document.createElement("button");
+        addButton.innerHTML = "Rate Product";
+        addButton.addEventListener("click", rateProductHandler(products[i]));
+        product_id = products[i].product_id;
+        cell7.appendChild(addButton);
       }
       table.style.display = "block";
     });   
 
+}
+function rateProductHandler(product) {
+  return function() {
+    //rateProduct(product)
+    product_id = product.product_id;
+    supplier_id = product.supplier_id;
+    showPopup()
+  };
+}
+function showPopup() {
+  var popup = document.getElementById("ratingPopup");
+  var closeButton = document.getElementsByClassName('close')[0];
+
+  function closeModal() {
+    popup.style.display = 'none';
+  }
+  closeButton.addEventListener('click', closeModal);  
+
+  popup.style.display = "block"; 
+  
+}
+function rateProduct() {
+  // Implement your "Add to Cart" logic here
+
+  var rating = document.getElementById("rating").value;
+
+  const data = {  product_id, supplier_id, rating };
+
+  fetch("http://localhost:3000/addRating", {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  })
+    .then(data => {
+      alert("Data added successfully!")
+
+    })
+    .catch(error => console.error(error));
+}
+
+function updateRatingDisplay() {
+  var rating = document.getElementById("rating").value;
+  document.getElementById("ratingDisplay").textContent = rating;
 }

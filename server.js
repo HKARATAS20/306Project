@@ -133,33 +133,37 @@ function contains(val, col_name, table_name){
 function bycategory(category){
     var query = "";
     if(category == "All"){
-      query = `SELECT p.product_id ,p.name, p.category, p.description, MIN(sp.price) AS min_price
+      query = `SELECT p.product_id, p.name, p.category, p.description, MIN(sp.price) AS min_price, AVG(r.rating) AS avg_rating
       FROM products p
       JOIN supplier_product sp ON p.product_id = sp.product_id
-      GROUP BY p.product_id, p.category, p.description  `
+      LEFT JOIN ratings r ON p.product_id = r.product_id
+      GROUP BY p.product_id, p.name, p.category, p.description
+       `
     }  
     else{
 
-      query = `SELECT p.product_id, p.name, p.category, p.description, MIN(sp.price) AS min_price
+      query = `SELECT p.product_id, p.name, p.category, p.description, MIN(sp.price) AS min_price, AVG(r.rating) AS avg_rating
       FROM products p
       JOIN supplier_product sp ON p.product_id = sp.product_id
-      WHERE category = '${category}'
-      GROUP BY p.product_id, p.category, p.description`
+      LEFT JOIN ratings r ON p.product_id = r.product_id
+      WHERE p.category = '${category}'
+      GROUP BY p.product_id, p.name, p.category, p.description
+      `
 
 
     }
     return query;
 }
 function byId(id){
-  var  query = `SELECT s.name as supplier_name ,sp.supplier_id,p.product_id ,p.name, p.category, p.description, sp.price
-    FROM products p
-    JOIN supplier_product sp ON p.product_id = sp.product_id
-    JOIN suppliers s ON s.supplier_id = sp.supplier_id
-    WHERE p.product_id = '${id}'
-    GROUP BY supplier_name ,sp.supplier_id, p.product_id, p.category, p.description, sp.price`
-
-
-  
+  var  query = `SELECT s.name AS supplier_name, sp.supplier_id, p.product_id, p.name, p.category, p.description, sp.price,
+                AVG(r.rating) AS supplier_rating
+                FROM products p
+                JOIN supplier_product sp ON p.product_id = sp.product_id
+                JOIN suppliers s ON s.supplier_id = sp.supplier_id
+                LEFT JOIN ratings r ON s.supplier_id = r.supplier_id
+                WHERE p.product_id = '${id}'
+                GROUP BY supplier_name, sp.supplier_id, p.product_id, p.name, p.category, p.description, sp.price
+            `
   return query;
   // WHERE p.product_id = '${id}'
 }
@@ -299,6 +303,17 @@ app.post('/addItems', (req, res) => {
   });
 })
 
+app.post('/addRating', (req, res) => {
+  db.query('USE project'); 
+  console.log("Ratingin içi burası");
+  const { product_id, supplier_id, rating } = req.body;
+  db.query(`INSERT INTO ratings (customer_id, product_id, supplier_id, rating) VALUES ( ?, ?, ?, ?)`, 
+          [user_id, product_id, supplier_id, rating], (error, results) => {
+    if (error) throw error;
+    res.send('Data added successfully!');
+  });
+});
+
 app.get('/getUser', (req,res) => {
   db.query('USE project');
   const{email} = req.query;
@@ -345,7 +360,7 @@ app.get('/fillProducts', (req,res) => {
           throw error;
       }
       else{
-          console.log(results);
+          //console.log(results);
           res.status(201).send(results);
       }
   });
@@ -355,7 +370,8 @@ app.get('/fillProducts', (req,res) => {
 app.get('/fillOrders', (req,res) => {
   db.query('USE project');
 
-  db.query(`select products.name as product_name, order_items.quantity, order_items.price, orders.order_date, orders.shipping_address, suppliers.name as supplier_name
+  db.query(`select products.name as product_name, products.product_id as product_id, order_items.quantity, order_items.price, orders.order_date,
+            suppliers.supplier_id as supplier_id, orders.shipping_address, suppliers.name as supplier_name
   from order_items
   join orders on orders.order_id = order_items.order_id
   join products on order_items.product_id = products.product_id
@@ -365,7 +381,7 @@ app.get('/fillOrders', (req,res) => {
           throw error;
       }
       else{
-          console.log(results);
+          //console.log(results);
           res.status(201).send(results);
       }
   });

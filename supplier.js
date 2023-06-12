@@ -9,7 +9,6 @@ function openPopUp() {
         item.style.display = 'none';
     }
     closeButton.addEventListener('click', closeModal);  
-
 }
 
 function addProduct() {
