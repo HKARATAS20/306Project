@@ -471,5 +471,30 @@ app.get('/frequentlyBought', (req,res) => {
 });
 
 
+app.get('/mostPurchased', (req,res) => {
+  db.query('USE project');
+  const{category} = req.query;
+
+
+  const query = `SELECT p.product_id, p.name, COUNT(*) AS total_purchases
+  FROM products p
+  JOIN order_items oi ON p.product_id = oi.product_id
+  JOIN orders o ON oi.order_id = o.order_id
+  WHERE p.category= '${category}'
+  GROUP BY p.product_id
+  ORDER BY total_purchases DESC
+  LIMIT 1;`
+
+  db.query(query,(error,results) => {
+      if(error){
+          throw error;
+      }
+      else{
+        console.log(results);
+          res.status(201).send(results);
+      }
+  });
+});
+
 
 
