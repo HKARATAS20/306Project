@@ -230,13 +230,6 @@ app.post('/checkout', (req, res) => {
     }
   });
   
-  /*db.query(`INSERT INTO orders (customer_id, order_date , shipping_address, total_amount) VALUES (?, CURRENT_DATE(), "?", ?)`, 
-            [user_id,address, total], (error, results) => {
-    if (error) throw error;
-    res.send('Data added successfully!');
-  });*/
-
-
 });
 
 app.post('/addItems', (req, res) => {
@@ -289,11 +282,11 @@ app.get('/fillBasket', (req,res) => {
   });
 });
 
-app.get('/emptyBasket', (req,res) => {
+app.get('/fillCategories', (req,res) => {
   db.query('USE project');
 
 
-  db.query(`DELETE FROM basket_items WHERE customer_id = '${user_id}'`,(error,results) => {
+  db.query(`SELECT DISTINCT category FROM products`,(error,results) => {
       if(error){
           throw error;
       }
@@ -303,6 +296,7 @@ app.get('/emptyBasket', (req,res) => {
       }
   });
 });
+
 
 
 

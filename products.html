@@ -16,17 +16,10 @@
     <input type="button" value="My Orders" onclick="productsby()" style="margin-left: 85%;">
 
     <label for="Category-select">Choose a category:</label>
-    <select id="Category-select">
-        <option value="All">All</option>
-        <option value="Laptops">Laptops</option>
-        <option value="Smartphones">Smartphones</option>
-        <option value="Mice">Mice</option>
-        <option value="Monitors">Monitors</option>
-        <option value="Gaming Consoles">Gaming Consoles</option>
-        <option value="Fitness Trackers">Fitness Trackers</option>
-        <option value="Smart Speakers">Smart Speakers</option>
-        <option value="Cameras">Cameras</option>
-    </select>
+    <select id="Category-select"></select>
+    
+    <script type="text/javascript">initialCategory();</script>
+    <script type="text/javascript">fillCategories();</script>
 
     <input type="button" value="List products" onclick="productsby()">
 
@@ -51,6 +44,9 @@
         </tr>
     
 </table>
+<script type="text/javascript">
+    productsby();
+</script>
 
 
 </body>
