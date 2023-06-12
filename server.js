@@ -240,6 +240,14 @@ app.post('/addToBasket', (req, res) => {
   });
 });
 
+app.get('/emptyBasket', (req, res) => {
+  db.query('USE project');
+  db.query(`DELETE FROM basket_items WHERE customer_id = ${user_id};`,  (error, results) => {
+    if (error) throw error;
+    res.send('Data deleted successfully!');
+  });
+});
+
 
 app.post('/checkout', (req, res) => {
   db.query('USE project');
