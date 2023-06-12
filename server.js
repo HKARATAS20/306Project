@@ -326,7 +326,6 @@ app.post('/addItems', (req, res) => {
 
 app.post('/addRating', (req, res) => {
   db.query('USE project'); 
-  console.log("Ratingin içi burası");
   const { product_id, supplier_id, rating } = req.body;
   db.query(`INSERT INTO ratings (customer_id, product_id, supplier_id, rating) VALUES ( ?, ?, ?, ?)`, 
           [user_id, product_id, supplier_id, rating], (error, results) => {
@@ -449,13 +448,14 @@ app.get('/frequentlyBought', (req,res) => {
   const{id} = req.query;
   console.log("frqntly bouhght id",id);
 
-  const query = `SELECT  oi1.product_id, COUNT(*) AS frequency
+  const query = `SELECT p1.name AS product_name, COUNT(*) AS frequency
   FROM order_items oi1
   JOIN order_items oi2 ON oi1.order_id = oi2.order_id 
                        AND oi1.product_id != oi2.product_id 
                        AND oi2.product_id = ${id}
                        AND oi1.product_id < oi2.product_id 
-  GROUP BY oi1.product_id, oi2.product_id
+  JOIN products p1 ON oi1.product_id = p1.product_id
+  GROUP BY oi1.product_id, oi2.product_id, p1.name
   ORDER BY frequency DESC
   LIMIT 2;`
 

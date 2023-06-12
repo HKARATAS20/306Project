@@ -95,6 +95,15 @@ function addProducts(product) {
 
         console.log(result);
   
+      var freqTable = document.getElementById("FrequentsWithId");
+      for(var i = freqTable.rowslength - 1; i > 0;i--){
+          freqTable.deleteRow(i);
+        }
+        for(var i = 0; i < result.length; i++){
+          var row = freqTable.insertRow(i+1);
+          var cell1 = row.insertCell(0);
+          cell1.innerHTML = result[i].product_name;
+        }
       var table = document.getElementById("ProductsWithId");
       for(var i = table.rows.length -1; i > 0;i--){
         table.deleteRow(i);
@@ -121,6 +130,7 @@ function addProducts(product) {
         product_id = products[i].product_id;
         cell5.appendChild(addButton);
       }
+      freqTable.style.display = "block";
       table.style.display = "block";
     });
     });
