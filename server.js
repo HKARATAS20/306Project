@@ -237,10 +237,31 @@ app.post('/addProducts', (req, res) => {
 app.post('/addToBasket', (req, res) => {
   db.query('USE project');
   const data = { product_id, supplier_id, quantity, price } = req.body;
-  db.query(`INSERT INTO basket_items (customer_id, product_id, supplier_id, quantity, price) VALUES (?, ?, ?, ?, ?)`, 
-          [user_id, product_id, supplier_id, quantity, price], (error, results) => {
-    if (error) throw error;
-    res.send('Data added successfully!');
+
+  const query = `SELECT COUNT(*) AS count FROM basket_items WHERE customer_id = ${user_id} AND product_id = ${product_id} AND supplier_id = ${supplier_id}`;
+  db.query(query, (error, results, fields) => {
+    if (error) {
+      console.error(error);
+      return false;
+    }
+    const count = results[0].count;
+    const result = count > 0;
+    console.log("Contains func result: ", result);
+
+    if (result == false) {
+      db.query(`INSERT INTO basket_items (customer_id, product_id, supplier_id, quantity, price) VALUES (?, ?, ?, ?, ?)`, 
+              [user_id, product_id, supplier_id, quantity, price], (error, results) => {
+        if (error) throw error;
+        res.send('Data added successfully!');
+      });
+    }
+    else {
+      db.query(`UPDATE basket_items SET quantity = quantity + 1 WHERE customer_id = ${user_id} AND product_id = ${product_id} AND supplier_id = ${supplier_id}`, 
+        (error, results) => {
+        if (error) throw error;
+        res.send('Data added successfully!');
+      });
+    }
   });
 });
 
