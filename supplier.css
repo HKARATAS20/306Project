@@ -50,6 +50,9 @@
     margin-top: 5%;
   }
   
+  .supplier-container {
+    display: flex;
+  }
   
   
   
