@@ -31,7 +31,7 @@ input[type="button"] {
 body {
     display: flex;
     flex-direction: column;
-    justify-content:baseline;
+    justify-content: baseline;
     align-items: center;
     height: 100vh;
 }
@@ -60,9 +60,13 @@ form {
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 5px;
+    margin-top: 20px;
 }
 
 form.show {
     display: block;
 }
 
+.submit-button {
+    width: auto;
+}
