@@ -476,7 +476,6 @@ app.get('/mostPurchased', (req,res) => {
   db.query('USE project');
   const{category} = req.query;
 
-
   const query = `SELECT p.product_id, p.name, COUNT(*) AS total_purchases
   FROM products p
   JOIN order_items oi ON p.product_id = oi.product_id

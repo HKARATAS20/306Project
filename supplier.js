@@ -69,12 +69,10 @@ function mostCity() {
     .then(function(response){
       return response.json();
     })
-    .then(function(city){
-      var myDiv = document.getElementById("myDiv");
+    .then(city => {
+      var myDiv = document.getElementById("my-div");
+      console.log("City: ", city);
       myDiv.innerHTML = city[0].city;
-
-
-
     });   
 
   
