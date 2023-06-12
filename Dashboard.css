@@ -120,3 +120,20 @@ body {
     margin-bottom: 10px;
     box-sizing: border-box;
   }
+
+  .container {
+    display: flex;
+  }
+  
+  .button-container {
+    display: flex;
+    margin-left: 40%;
+  }
+  .first-button {
+    margin-left: 20%;
+  }
+  .list-product {
+    margin-left: 3%;
+  }
+  
+  
