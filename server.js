@@ -412,7 +412,7 @@ app.get('/fillOrders', (req,res) => {
 app.get('/fillBasket', (req,res) => {
   db.query('USE project');
 
-  db.query(`SELECT b.*, p.name , s.name as supplier_name, (SELECT SUM(price) FROM basket_items WHERE customer_id = ${user_id}) as total
+  db.query(`SELECT b.*, p.name , s.name as supplier_name, (SELECT SUM(price * b.quantity) FROM basket_items WHERE customer_id = ${user_id}) as total
           FROM basket_items b
           JOIN products p ON b.product_id = p.product_id
           JOIN suppliers s ON s.supplier_id = b.supplier_id

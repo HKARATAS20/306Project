@@ -5,7 +5,7 @@ function continueShopping() {
 }
 
 function fillTable() {
-    
+        var basket_total = 0;    
         fetch('http://localhost:3000/fillBasket')
         .then(function(response){
           return response.json();
@@ -28,7 +28,8 @@ function fillTable() {
             cell1.innerHTML = products[i].name;
             cell2.innerHTML = products[i].supplier_name;
             cell3.innerHTML = products[i].quantity;
-            cell4.innerHTML = products[i].price;
+            basket_total += products[i].price * products[i].quantity;
+            cell4.innerHTML = products[i].price * products[i].quantity;
             
           }
           if(i > 0){
@@ -45,7 +46,7 @@ function fillTable() {
           var cell2 = row.insertCell(1);
           var cell3 = row.insertCell(2);
           var cell4 = row.insertCell(3);
-          cell4.innerHTML = products[0].total
+          cell4.innerHTML = basket_total;
           }
           table.style.display = "block";
         });   
