@@ -10,11 +10,12 @@
     <script type="text/javascript" src="supplier.js"></script>
 </head>
 
-<h1>Welcome to supplier page!</h1>
+<h1>Welcome to Supplier Page!</h1>
 <h1>Your Products</h1>
 
     <input type="button" value="Add Product" onclick="openPopUp()">
     
+    <div id="my-div" class="supplier-container">
     <table id="Products" style="display:block">
             <tr>
                 <th>Product Name</th>
@@ -23,6 +24,9 @@
                 <th>Stock</th>
             </tr>
     </table>
+        <h2>The city you sold the most items to:</h2>
+
+    </div>
 
     <div style="display: none;" id="addPopUp" class="modal">
         <div class="modal-content">
