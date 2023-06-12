@@ -120,3 +120,13 @@ body {
     margin-bottom: 10px;
     box-sizing: border-box;
   }
+  
+  .table-container {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  table {
+    width: 48%;
+  }
+  
