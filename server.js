@@ -243,6 +243,16 @@ app.post('/addItems', (req, res) => {
   });
 })
 
+app.post('/addRating', (req, res) => {
+  db.query('USE project');
+  const data = { product_id, supplier_id, quantity, price } = req.body;
+  db.query(`INSERT INTO ratings (customer_id, product_id, supplier_id, quantity, price) VALUES (?, ?, ?, ?, ?)`, 
+          [user_id, product_id, supplier_id, quantity, price], (error, results) => {
+    if (error) throw error;
+    res.send('Data added successfully!');
+  });
+});
+
 app.get('/getUser', (req,res) => {
   db.query('USE project');
   const{email} = req.query;
@@ -263,10 +273,11 @@ app.get('/getUser', (req,res) => {
 });
 
 
+
 app.get('/fillOrders', (req,res) => {
   db.query('USE project');
 
-  db.query(`select products.name as product_name, order_items.quantity, order_items.price, orders.order_date,
+  db.query(`select products.name as product_name, products.product_id as product_id, order_items.quantity, order_items.price, orders.order_date,
             suppliers.supplier_id as supplier_id, orders.shipping_address, suppliers.name as supplier_name
   from order_items
   join orders on orders.order_id = order_items.order_id

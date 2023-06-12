@@ -48,16 +48,21 @@ function fillOrderTable() {
 function rateProductHandler(product) {
   return function() {
     rateProduct(product)
+    //showPopup()
   };
 }
-
+function showPopup() {
+  var popup = document.getElementById("ratingPopup");
+  popup.style.display = "block"; 
+  
+}
 function rateProduct(product) {
   // Implement your "Add to Cart" logic here
   const product_id = product.product_id;
   const supplier_id = product.supplier_id;
   const quantity = 1;
   const price = product.price;
-  console.log(product);
+  console.log(product_id);
 
   const data = { product_id, supplier_id, quantity, price };
 
