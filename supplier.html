@@ -3,6 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="supplier.css">
     <link rel="stylesheet" href="Dashboard.css">
     <title>COMP306</title>
     <script type="text/javascript" src="orders.js"></script>
@@ -12,7 +13,7 @@
 <h1>Welcome to supplier page!</h1>
 <h1>Your Products</h1>
 
-    <input type="button" value="Add Product" onclick="addProduct()">
+    <input type="button" value="Add Product" onclick="openPopUp()">
     
     <table id="Products" style="display:block">
             <tr>
@@ -22,5 +23,21 @@
                 <th>Stock</th>
             </tr>
     </table>
+
+    <div style="display: none;" id="addPopUp" class="modal">
+        <div class="modal-content">
+          <span class="close">&times;</span>
+          <h2>Add Product</h2>
+          <input type="text" id="productName" placeholder="Product Name">
+          <input type="text" id="price" placeholder="Price">
+          <input type="text" id="stock" placeholder="Stock">
+          <input type="text" id="category" placeholder="Category">
+          <input type="text" id="description" placeholder="Description">
+          <input type="text" id="brand" placeholder="Brand">
+          <input id="addProductButton" type="button" value="Add Product" onclick="addProduct()">
+        </div>
+    </div>
+
+    <script type="text/javascript">fillProductsTable();</script>
 
 </html>

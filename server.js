@@ -117,29 +117,18 @@ function products() {
 
 
 function contains(val, col_name, table_name){
-  db.connect((err) => {
-    if (err) {
-        console.log(err);
-    }
-    db.query('use world');
-    
-    db.query(`SELECT COUNT(*) FROM ${table_name} WHERE ${col_name} = '${val}'`, (err,result) => {
-      if(err){
-          throw err;
-      }
-      const { 'COUNT(*)': count } = result[0];
-      console.log("result",result )
-      if(count > 0){
-        console.log("true");
-        return true;
-      }
-      else{
-      console.log("false");
+  const query = `SELECT COUNT(*) AS count FROM ${table_name} WHERE ${col_name} = '${val}'`;
+  db.query(query, (error, results, fields) => {
+    if (error) {
+      console.error(error);
       return false;
-      }
-    });
-  }
-)};
+    }
+    const count = results[0].count;
+    const result = count > 0;
+    console.log(result);
+    return count > 0;
+  });
+};
 
 function bycategory(category){
     var query = "";
@@ -192,6 +181,53 @@ app.post('/addSupplier', (req, res) => {
     if (error) throw error;
     res.send('Data added successfully!');
   });
+});
+
+app.post('/addProducts', (req, res) => {
+  db.query('USE project');
+  const { product_name, price, stock, category, description, brand } = req.body;
+
+  const query = `SELECT COUNT(*) AS count FROM products WHERE name = '${product_name}'`;
+  db.query(query, (error, results, fields) => {
+    if (error) {
+      console.error(error);
+      return false;
+    }
+    const count = results[0].count;
+    const result = count > 0;
+    console.log("Contains func result: ", result);
+    
+    if (result == false) {
+        db.query(`INSERT INTO products (name, description, category, stock, brand) VALUES (?, ?, ?, 1, ?)`,
+      [product_name, description, category, brand], (error, results) => {
+        if (error) throw error;
+
+        db.query(`SELECT LAST_INSERT_ID();`, (error, lastInsertIdResults) => {
+          db.query(`INSERT INTO supplier_product (supplier_id, product_id, price, stock) VALUES (?, ?, ?, ?)`,
+          [supplier_id, lastInsertIdResults[0]['LAST_INSERT_ID()'], price, stock], (error, results) => {
+            if (error) throw error;
+            res.send('Data added successfully!');
+          });
+        });
+      });
+    }
+    else {
+      db.query(`SELECT product_id from products where name = "${product_name}"`, (error, results) => {
+        if (error) throw error;
+        console.log("Results:", results);
+        console.log("Resultus[0]: ", results[0]);
+        
+        db.query(`INSERT INTO supplier_product (supplier_id, product_id, price, stock) VALUES (?, ?, ?, ?)`,
+         [supplier_id, results[0].product_id, price, stock], (error, results) => {
+          if (error) throw error;
+          res.send('Data added successfully!');
+        });
+  
+      })
+    }
+
+  });
+  
 });
 
 app.post('/addToBasket', (req, res) => {
@@ -285,6 +321,25 @@ app.get('/getSupplier', (req,res) => {
       }
   });
 });
+
+
+app.get('/fillProducts', (req,res) => {
+  db.query('USE project');
+
+  db.query(`select products.name as product_name, supplier_product.product_id, supplier_product.price, supplier_product.stock
+  from supplier_product
+  join products on products.product_id = supplier_product.product_id
+  where supplier_id ='${supplier_id}'`,(error,results) => {
+      if(error){
+          throw error;
+      }
+      else{
+          console.log(results);
+          res.status(201).send(results);
+      }
+  });
+});
+
 
 app.get('/fillOrders', (req,res) => {
   db.query('USE project');
