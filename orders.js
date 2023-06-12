@@ -1,7 +1,5 @@
 function goToOrders() {
-
     window.location.href = "../orders.html";
-
 }
 
 function fillOrderTable() {
@@ -12,7 +10,7 @@ function fillOrderTable() {
     })
     .then(function(products){
       var table = document.getElementById("Orders");
-      for(var i = table.rows.length -1; i > 0;i--){
+      for(var i = table.rows.length - 1; i > 0; i--){
         table.deleteRow(i);
       }
       console.log(products);
