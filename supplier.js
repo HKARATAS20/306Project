@@ -62,3 +62,20 @@ function fillProductsTable() {
       table.style.display = "block";
     });   
 }
+
+
+function mostCity() {
+  fetch('http://localhost:3000/mostPurchased')
+    .then(function(response){
+      return response.json();
+    })
+    .then(function(city){
+      var myDiv = document.getElementById("myDiv");
+      myDiv.innerHTML = city[0].city;
+
+
+
+    });   
+
+  
+}

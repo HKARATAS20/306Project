@@ -498,4 +498,29 @@ app.get('/mostPurchased', (req,res) => {
 });
 
 
+app.get('/mostPurchased', (req,res) => {
+  db.query('USE project');
+
+  const query = `SELECT c.city, COUNT(*) AS total_products
+  FROM customers c
+  JOIN orders o ON c.customer_id = o.customer_id
+  JOIN order_items oi ON o.order_id = oi.order_id
+  JOIN supplier_product sp ON oi.product_id = sp.product_id AND sp.supplier_id = ${supplier_id}
+  GROUP BY c.city
+  ORDER BY total_products DESC
+  LIMIT 1;
+  `
+
+  db.query(query,(error,results) => {
+      if(error){
+          throw error;
+      }
+      else{
+        console.log(results);
+          res.status(201).send(results);
+      }
+  });
+});
+
+
 
