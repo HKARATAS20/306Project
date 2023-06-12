@@ -85,12 +85,20 @@ function addProducts(product) {
       return response.json();
     })
     .then(function(products){
+
+
+      fetch('http://localhost:3000/frequentlyBought?id=' + product_id)
+      .then(function(response){
+        return response.json();
+      })
+      .then(function(result){
+
+        console.log(result);
+  
       var table = document.getElementById("ProductsWithId");
       for(var i = table.rows.length -1; i > 0;i--){
         table.deleteRow(i);
       }
-      console.log(products);
-      //console.log(products[0].Name);
       for(var i = 0; i < products.length; i++){
         var row = table.insertRow(i+1);
         var cell1 = row.insertCell(0);
@@ -114,6 +122,7 @@ function addProducts(product) {
         cell5.appendChild(addButton);
       }
       table.style.display = "block";
+    });
     });
 
 }

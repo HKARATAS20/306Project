@@ -444,7 +444,31 @@ app.get('/fillCategories', (req,res) => {
 
 
 
+app.get('/frequentlyBought', (req,res) => {
+  db.query('USE project');
+  const{id} = req.query;
+  console.log("frqntly bouhght id",id);
 
+  const query = `SELECT  oi1.product_id, COUNT(*) AS frequency
+  FROM order_items oi1
+  JOIN order_items oi2 ON oi1.order_id = oi2.order_id 
+                       AND oi1.product_id != oi2.product_id 
+                       AND oi2.product_id = ${id}
+                       AND oi1.product_id < oi2.product_id 
+  GROUP BY oi1.product_id, oi2.product_id
+  ORDER BY frequency DESC
+  LIMIT 2;`
+
+  db.query(query,(error,results) => {
+      if(error){
+          throw error;
+      }
+      else{
+        console.log(results);
+          res.status(201).send(results);
+      }
+  });
+});
 
 
 
