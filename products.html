@@ -26,7 +26,8 @@
 
     <input type="button" value="Go To Basket" onclick="goToBasket()">
 
-    <table id="Products" style="display:none">
+    <div class="first-container">
+        <table id="Products" style="display:none">
             <tr>
                 <th>Name</th>
                 <th>Price</th>
@@ -35,7 +36,17 @@
                 <th> </th>
             </tr>
         
-    </table>
+        </table>
+        <table id="MostPurchased" style="display:none;">
+            <caption id="most_purchased_table">Most Purchased</caption>
+            <tr>
+                <th>Product Name</th>
+                <th>Number of Purchases</th>
+            </tr>
+        </table>
+    </div>
+    
+
     <div class="table-container">
         <table id="ProductsWithId" style="display:none">
             <caption id="table_title"></caption>
@@ -55,13 +66,6 @@
             </tr>
         </table>
 
-    </table>
-    <table id="MostPurchased" style="display:none;">
-        <caption id="most_purchased_table">Most Purchased</caption>
-        <tr>
-            <th>Product Name</th>
-            <th> </th>
-        </tr>
     </table>
     </div>
     

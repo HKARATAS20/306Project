@@ -38,12 +38,19 @@ function productsby() {
         for(var i = mostTable.rows.length -1; i > 0;i--){
           mostTable.deleteRow(i);
         }
-        for(var i = 0; i < mostPurchased.length; i++){
-          var row = mostTable.insertRow(i+1);
-          var cell1 = row.insertCell(0);
-          var cell2 = row.insertCell(1);
-          cell1.innerHTML = mostPurchased[i].name;
-          cell2.innerHTML = mostPurchased[i].total_purchases;
+
+        if (mostPurchased.length <= 0) {
+          mostTable.style.display = "none";
+        }
+        else {
+          for(var i = 0; i < mostPurchased.length; i++){
+            var row = mostTable.insertRow(i+1);
+            var cell1 = row.insertCell(0);
+            var cell2 = row.insertCell(1);
+            cell1.innerHTML = mostPurchased[i].name;
+            cell2.innerHTML = mostPurchased[i].total_purchases;
+          }
+          mostTable.style.display = "block";
         }
         console.log(products);
         //console.log(products[0].Name);
@@ -68,7 +75,6 @@ function productsby() {
           cell5.appendChild(showButton);
         }
         table.style.display = "block";
-        mostTable.style.display = "block";
         freqTable.style.display = "none";
       });
 
