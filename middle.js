@@ -133,7 +133,7 @@ function addProducts(product) {
 
       var mostTable = document.getElementById("MostPurchased");
       var freqTable = document.getElementById("FrequentsWithId");
-      for(var i = freqTable.rowslength - 1; i > 0;i--){
+      for(var i = freqTable.rows.length - 1; i > 0;i--){
           freqTable.deleteRow(i);
         }
         for(var i = 0; i < result.length; i++){
