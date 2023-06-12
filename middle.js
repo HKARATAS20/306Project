@@ -103,7 +103,7 @@ function addProducts(product) {
         cell1.innerHTML = products[i].supplier_name;
         cell2.innerHTML = products[i].price;
         cell3.innerHTML = products[i].category;
-        cell4.innerHTML = products[i].avg_rating;
+        cell4.innerHTML = products[i].supplier_rating;
 
         
 
