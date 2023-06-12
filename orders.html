@@ -24,6 +24,18 @@
             <th>Rate</th>
         </tr>
 </table>
+
+<div style="display: none;" id="ratingPopup" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Rate Product</h2>
+      <input type="range" id="rating" name="rating" min="0" max="5" oninput="updateRatingDisplay()">
+      <span id="ratingDisplay"></span>
+      <input id="rateProductButton" type="button" value="Rate Product" onclick="rateProduct()">
+    </div>
+</div>
+
 <script type="text/javascript">fillOrderTable();</script>
+<script type="text/javascript">updateRatingDisplay();</script>
 
 </html>

@@ -1,3 +1,6 @@
+var product_id;
+var supplier_id;
+
 function goToOrders() {
     window.location.href = "../orders.html";
 }
@@ -47,26 +50,32 @@ function fillOrderTable() {
 }
 function rateProductHandler(product) {
   return function() {
-    rateProduct(product)
-    //showPopup()
+    //rateProduct(product)
+    product_id = product.product_id;
+    supplier_id = product.supplier_id;
+    showPopup()
   };
 }
 function showPopup() {
   var popup = document.getElementById("ratingPopup");
+  var closeButton = document.getElementsByClassName('close')[0];
+
+  function closeModal() {
+    popup.style.display = 'none';
+  }
+  closeButton.addEventListener('click', closeModal);  
+
   popup.style.display = "block"; 
   
 }
-function rateProduct(product) {
+function rateProduct() {
   // Implement your "Add to Cart" logic here
-  const product_id = product.product_id;
-  const supplier_id = product.supplier_id;
-  const quantity = 1;
-  const price = product.price;
-  console.log(product_id);
 
-  const data = { product_id, supplier_id, quantity, price };
+  var rating = document.getElementById("rating").value;
 
-  /*fetch("http://localhost:3000/addToBasket", {
+  const data = {  product_id, supplier_id, rating };
+
+  fetch("http://localhost:3000/addRating", {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -77,6 +86,10 @@ function rateProduct(product) {
       alert("Data added successfully!")
 
     })
-    .catch(error => console.error(error));*/
+    .catch(error => console.error(error));
 }
 
+function updateRatingDisplay() {
+  var rating = document.getElementById("rating").value;
+  document.getElementById("ratingDisplay").textContent = rating;
+}

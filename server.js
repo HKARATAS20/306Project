@@ -300,20 +300,11 @@ app.post('/addItems', (req, res) => {
 })
 
 app.post('/addRating', (req, res) => {
-  db.query('USE project');
-  const data = { product_id, supplier_id, quantity, price } = req.body;
-  db.query(`INSERT INTO ratings (customer_id, product_id, supplier_id, quantity, price) VALUES (?, ?, ?, ?, ?)`, 
-          [user_id, product_id, supplier_id, quantity, price], (error, results) => {
-    if (error) throw error;
-    res.send('Data added successfully!');
-  });
-});
-
-app.post('/addRating', (req, res) => {
-  db.query('USE project');
-  const data = { product_id, supplier_id, quantity, price } = req.body;
-  db.query(`INSERT INTO ratings (customer_id, product_id, supplier_id, quantity, price) VALUES (?, ?, ?, ?, ?)`, 
-          [user_id, product_id, supplier_id, quantity, price], (error, results) => {
+  db.query('USE project'); 
+  console.log("Ratingin içi burası");
+  const { product_id, supplier_id, rating } = req.body;
+  db.query(`INSERT INTO ratings (customer_id, product_id, supplier_id, rating) VALUES ( ?, ?, ?, ?)`, 
+          [user_id, product_id, supplier_id, rating], (error, results) => {
     if (error) throw error;
     res.send('Data added successfully!');
   });
@@ -365,7 +356,7 @@ app.get('/fillProducts', (req,res) => {
           throw error;
       }
       else{
-          console.log(results);
+          //console.log(results);
           res.status(201).send(results);
       }
   });
@@ -386,7 +377,7 @@ app.get('/fillOrders', (req,res) => {
           throw error;
       }
       else{
-          console.log(results);
+          //console.log(results);
           res.status(201).send(results);
       }
   });
