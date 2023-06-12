@@ -7,13 +7,14 @@
     <title>COMP306</title>
     <script type="text/javascript" src="middle.js"></script>
     <script type="text/javascript" src="basket.js"></script>
+    <script type="text/javascript" src="orders.js"></script>
     
 </head>
 
 <body>
 
     <h1>Welcome To çakma Amazon</h1>
-    <input type="button" value="My Orders" onclick="productsby()" style="margin-left: 85%;">
+    <input type="button" value="My Orders" onclick="goToOrders()" style="margin-left: 85%;">
 
     <label for="Category-select">Choose a category:</label>
     <select id="Category-select">
@@ -30,7 +31,7 @@
 
     <input type="button" value="List products" onclick="productsby()">
 
-    <input type="button" value="Go To Basket" onclick="goToBasket(); fillTable()">
+    <input type="button" value="Go To Basket" onclick="goToBasket()">
 
     <table id="Products" style="display:none">
             <tr>

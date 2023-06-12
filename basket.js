@@ -53,8 +53,6 @@ function fillTable() {
 
 
 function emptyBasket() {
-    // De ki: server.js o basketi silsin buyurdu.
-
     fetch('http://localhost:3000/emptyBasket');
     var table = document.getElementById("Basket");
     for(var i = table.rows.length -1; i > 0;i--){

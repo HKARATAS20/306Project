@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="Dashboard.css">
+    <title>COMP306</title>
+    <script type="text/javascript" src="orders.js"></script>
+    <script type="text/javascript" src="basket.js"></script>
+</head>
+
+<h1>Your orders</h1>
+
+<input type="button" value="Continue Shopping" onclick="continueShopping()">
+    
+<table id="Orders" style="display:block">
+        <tr>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Order Date</th>
+            <th>Address</th>
+            <th>Supplier</th>
+        </tr>
+</table>
+<script type="text/javascript">fillOrderTable();</script>
+
+</html>

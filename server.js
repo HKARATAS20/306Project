@@ -270,6 +270,26 @@ app.get('/getUser', (req,res) => {
 });
 
 
+app.get('/fillOrders', (req,res) => {
+  db.query('USE project');
+
+  db.query(`select products.name as product_name, order_items.quantity, order_items.price, orders.order_date, orders.shipping_address, suppliers.name as supplier_name
+  from order_items
+  join orders on orders.order_id = order_items.order_id
+  join products on order_items.product_id = products.product_id
+  join suppliers on suppliers.supplier_id = order_items.supplier_id
+  where customer_id = '${user_id}'`,(error,results) => {
+      if(error){
+          throw error;
+      }
+      else{
+          console.log(results);
+          res.status(201).send(results);
+      }
+  });
+});
+
+
 app.get('/fillBasket', (req,res) => {
   db.query('USE project');
 
