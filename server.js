@@ -290,7 +290,12 @@ app.post('/addItems', (req, res) => {
   db.query(`INSERT INTO order_items (order_id, product_id, supplier_id, quantity, price) VALUES (?, ?, ?, ?, ?)`,
    [order_id, product_id, supplier_id, quantity, price], (error, results) => {
     if (error) throw error;
-    res.send('Data added successfully!');
+
+    db.query(`UPDATE supplier_product SET stock = stock - ${quantity} WHERE product_id = ${product_id} AND supplier_id = ${supplier_id}`,
+     (error, results) => {
+      if (error) throw error;
+      res.send("Data added successfully!");
+    });
   });
 })
 
@@ -298,7 +303,6 @@ app.get('/getUser', (req,res) => {
   db.query('USE project');
   const{email} = req.query;
   console.log("user email",email);
-
 
   db.query(`SELECT * FROM customers WHERE email = '${email}'`,(error,results) => {
       if(error){
@@ -316,7 +320,6 @@ app.get('/getSupplier', (req,res) => {
   db.query('USE project');
   const{email} = req.query;
   console.log("Supplier email",email);
-
 
   db.query(`SELECT * FROM suppliers WHERE contact_email = '${email}'`,(error,results) => {
       if(error){
@@ -371,7 +374,6 @@ app.get('/fillOrders', (req,res) => {
 
 app.get('/fillBasket', (req,res) => {
   db.query('USE project');
-
 
   db.query(`SELECT b.*, p.name , s.name as supplier_name, (SELECT SUM(price) FROM basket_items WHERE customer_id = ${user_id}) as total
           FROM basket_items b
