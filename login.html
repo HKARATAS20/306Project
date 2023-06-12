@@ -30,7 +30,7 @@
     </form>
 
     <form id="supplier-create-form">
-      <h2>Create User</h2>
+      <h2>Create Supplier</h2>
       <label for="supplier-name">Supplier Name</label>
       <input type="text" id="supplier-name" name="supplier-name"><br><br>
       <label for="supplier-email">Contact Email</label>
@@ -39,14 +39,14 @@
     </form>
 
     <form id="login-form">
-      <h2>login</h2>
+      <h2>Login</h2>
       <label for="login-email">Email</label>
       <input type="text" id="login-email" name="login-email"><br><br>
       <input type="button" value="Submit" onclick="queryData()">
     </form>
 
     <form id="supplier-login-form">
-      <h2>login</h2>
+      <h2>Supplier Login</h2>
       <label for="supplier-login-email">Email</label>
       <input type="text" id="supplier-login-email" name="supplier-login-email"><br><br>
       <input type="button" value="Submit" onclick="supplierQueryData()">
@@ -58,18 +58,26 @@
         if (action === 'create') {
           document.getElementById('create-form').classList.add('show');
           document.getElementById('login-form').classList.remove('show');
+          document.getElementById('supplier-login-form').classList.remove('show');
+          document.getElementById('supplier-create-form').classList.remove('show');
         }
         else if (action === 'create-supplier') {
           document.getElementById('supplier-create-form').classList.add('show');
           document.getElementById('create-form').classList.remove('show');
+          document.getElementById('login-form').classList.remove('show');
+          document.getElementById('supplier-login-form').classList.remove('show');
         } 
         else if (action === 'query') {
           document.getElementById('login-form').classList.add('show');
           document.getElementById('create-form').classList.remove('show');
+          document.getElementById('supplier-login-form').classList.remove('show');
+          document.getElementById('supplier-create-form').classList.remove('show');
         }
         else if (action === 'supplier-query') {
           document.getElementById('supplier-login-form').classList.add('show');
           document.getElementById('create-form').classList.remove('show');
+          document.getElementById('login-form').classList.remove('show');
+          document.getElementById('supplier-create-form').classList.remove('show');
         }
       }
     </script>
