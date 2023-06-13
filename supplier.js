@@ -70,7 +70,7 @@ function mostCity() {
       return response.json();
     })
     .then(city => {
-      var myDiv = document.getElementById("my-div");
+      var myDiv = document.getElementById("my-div2");
       console.log("City: ", city);
       myDiv.innerHTML = city[0].city;
     });   
