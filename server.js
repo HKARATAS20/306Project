@@ -497,7 +497,7 @@ app.get('/mostPurchased', (req,res) => {
 });
 
 
-app.get('/mostPurchased', (req,res) => {
+app.get('/mostCity', (req,res) => {
   db.query('USE project');
 
   const query = `SELECT c.city, COUNT(*) AS total_products

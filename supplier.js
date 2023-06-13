@@ -65,7 +65,7 @@ function fillProductsTable() {
 
 
 function mostCity() {
-  fetch('http://localhost:3000/mostPurchased')
+  fetch('http://localhost:3000/mostCity')
     .then(function(response){
       return response.json();
     })
