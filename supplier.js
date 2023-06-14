@@ -30,6 +30,7 @@ function addProduct() {
     })
       .then(data => {
         alert("Data added successfully!")
+        fillProductsTable();
       })
       .catch(error => console.error(error));
 }
