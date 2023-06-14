@@ -217,20 +217,48 @@ app.post('/addProducts', (req, res) => {
       });
     }
     else {
-      db.query(`SELECT product_id from products where name = "${product_name}"`, (error, results) => {
-        if (error) throw error;
-        console.log("Results:", results);
-        console.log("Resultus[0]: ", results[0]);
-        
-        db.query(`INSERT INTO supplier_product (supplier_id, product_id, price, stock) VALUES (?, ?, ?, ?)`,
-         [supplier_id, results[0].product_id, price, stock], (error, results) => {
-          if (error) throw error;
-          res.send('Data added successfully!');
-        });
-  
-      })
-    }
+      const query = `SELECT COUNT(*) AS count FROM supplier_product 
+                    JOIN products on products.product_id = supplier_product.product_id 
+                    WHERE products.name = '${product_name}' AND supplier_product.supplier_id = ${supplier_id}`;
+      db.query(query, (error, results, fields) => {
+        if (error) {
+          console.error(error);
+          return false;
+        }
+        const count = results[0].count;
+        const result = count > 0;
+        console.log("Contains func result: ", result);
 
+        if (result == false) {
+          db.query(`SELECT product_id from products where name = '${product_name}'`, (error, results) => {
+            if (error) throw error;
+            console.log("Results:", results);
+            console.log("Results[0]: ", results[0]);
+            
+            db.query(`INSERT INTO supplier_product (supplier_id, product_id, price, stock) VALUES (?, ?, ?, ?)`,
+            [supplier_id, results[0].product_id, price, stock], (error, results) => {
+              if (error) throw error;
+              res.send('Data added successfully!');
+            });
+      
+          })
+        }
+        else {
+          db.query(`SELECT product_id from products where name = '${product_name}'`, (error, results) => {
+            if (error) throw error;
+            console.log("Results:", results);
+            console.log("Results[0]: ", results[0]);
+            
+            db.query(`UPDATE supplier_product SET stock = stock + ${stock}
+                WHERE supplier_id = ${supplier_id} AND product_id = ${results[0].product_id}`,
+              (error, results) => {
+              if (error) throw error;
+              res.send('Data added successfully!');
+            });
+          })
+        }
+      });
+    };
   });
   
 });
